@@ -10,24 +10,50 @@ export default function ImportScreen({ onFilesLoaded, error }: ImportScreenProps
 
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragOver(false)
 
-    const files = Array.from(e.dataTransfer.files)
-    
-    // Use Electron's webUtils to get file paths
-    const filePaths = files.map(file => window.electron.getFilePathFromFile(file))
-    
-    if (filePaths.length > 0) {
-      onFilesLoaded(filePaths)
+    try {
+      const files = Array.from(e.dataTransfer.files)
+      
+      if (files.length === 0) {
+        console.warn('No files in drop event')
+        return
+      }
+      
+      // Use Electron's webUtils to get file paths
+      const filePaths = files
+        .map(file => {
+          try {
+            return window.electron.getFilePathFromFile(file)
+          } catch (err) {
+            console.error('Failed to get file path:', err)
+            return null
+          }
+        })
+        .filter((path): path is string => path !== null && path !== undefined)
+      
+      console.log('Dropped files:', filePaths)
+      
+      if (filePaths.length > 0) {
+        onFilesLoaded(filePaths)
+      } else {
+        console.error('No valid file paths extracted from drop')
+      }
+    } catch (err) {
+      console.error('Error handling drop:', err)
     }
   }
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragOver(true)
   }
 
-  const handleDragLeave = () => {
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     setIsDragOver(false)
   }
 
