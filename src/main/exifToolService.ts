@@ -31,9 +31,21 @@ export async function initializeExifTool(): Promise<void> {
     try {
       exifToolInstance = exiftool
       
-      // Don't call version() in packaged apps - it can hang
-      // Just mark as initialized and let first read/write call initialize it
-      console.log('ExifTool instance created')
+      // Force ExifTool to start by doing a dummy operation
+      // This extracts the binary and starts the process
+      try {
+        // Read version with a timeout to avoid hanging
+        const versionPromise = exifToolInstance.version()
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Version check timeout')), 3000)
+        )
+        
+        await Promise.race([versionPromise, timeoutPromise])
+        console.log('ExifTool fully initialized and ready')
+      } catch (warmupError) {
+        console.warn('ExifTool warmup had issues, but continuing:', warmupError)
+        // Continue anyway - it will initialize on first use
+      }
       
       isInitialized = true
     } catch (error) {

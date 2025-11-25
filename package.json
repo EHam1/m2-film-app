@@ -52,7 +52,7 @@
     "mac": {
       "target": ["dmg", "zip"],
       "category": "public.app-category.photography",
-      "icon": "build/icon.icns",
+      "icon": "build/icons/icon.png",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",

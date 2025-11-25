@@ -21,8 +21,8 @@ export function usePhotos() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const loadFiles = useCallback(async (filePaths?: string[]) => {
-    console.log('loadFiles called with:', filePaths)
+  const loadFiles = useCallback(async (filePaths?: string[], retryCount = 0) => {
+    console.log('loadFiles called with:', filePaths, 'retry:', retryCount)
     setLoading(true)
     setError(null)
 
@@ -59,6 +59,14 @@ export function usePhotos() {
       console.log('Metadata load result:', result)
 
       if (!result.success) {
+        // If this is the first attempt and it failed, retry once after a short delay
+        // This handles ExifTool initialization on first run
+        if (retryCount === 0) {
+          console.log('First attempt failed, retrying in 1 second...')
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          return loadFiles(filePaths, 1) // Retry with same files
+        }
+        
         const errorMsg = result.error || 'Failed to load photos'
         console.error('Metadata loading failed:', errorMsg)
         setError(errorMsg)
