@@ -31,9 +31,9 @@ export async function initializeExifTool(): Promise<void> {
     try {
       exifToolInstance = exiftool
       
-      // Warm up ExifTool by checking version (forces binary extraction and startup)
-      const version = await exifToolInstance.version()
-      console.log('ExifTool initialized successfully, version:', version)
+      // Don't call version() in packaged apps - it can hang
+      // Just mark as initialized and let first read/write call initialize it
+      console.log('ExifTool instance created')
       
       isInitialized = true
     } catch (error) {

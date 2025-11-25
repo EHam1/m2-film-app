@@ -36,18 +36,24 @@ function createWindow() {
   })
 }
 
-app.whenReady().then(async () => {
-  // Initialize ExifTool early to avoid delays on first file operation
-  console.log('App ready, initializing ExifTool...')
-  try {
-    await initializeExifTool()
-    console.log('ExifTool ready')
-  } catch (error) {
-    console.error('Failed to initialize ExifTool on startup:', error)
-    // Continue anyway - will retry on first use
-  }
-  
+app.whenReady().then(() => {
+  // Create window FIRST so user sees something immediately
   createWindow()
+  
+  // Initialize ExifTool in background (non-blocking)
+  console.log('App ready, initializing ExifTool in background...')
+  initializeExifTool()
+    .then(() => {
+      console.log('ExifTool ready')
+      // Notify renderer that ExifTool is ready
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('exiftool-ready')
+      }
+    })
+    .catch((error) => {
+      console.error('Failed to initialize ExifTool on startup:', error)
+      // Continue anyway - will retry on first use
+    })
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
