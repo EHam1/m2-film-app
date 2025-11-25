@@ -1,0 +1,70 @@
+# GitHub Actions Workflow for Building and Releasing M2 Film
+#
+# This workflow is currently COMMENTED OUT and serves as a template.
+# Uncomment and configure when ready to automate releases.
+#
+# SETUP REQUIRED:
+# 1. Add secrets to GitHub repo settings:
+#    - APPLE_ID
+#    - APPLE_ID_PASSWORD
+#    - APPLE_TEAM_ID
+#    - GH_TOKEN (GitHub Personal Access Token with repo access)
+#
+# 2. Uncomment the workflow below
+# 3. Push a tag to trigger: git tag v1.0.0 && git push origin v1.0.0
+
+# name: Release
+
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+
+# jobs:
+#   release:
+#     runs-on: macos-latest
+    
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+      
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'
+#           cache: 'npm'
+      
+#       - name: Install dependencies
+#         run: npm ci
+      
+#       - name: Build application
+#         run: npm run build
+      
+#       - name: Package and release
+#         env:
+#           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+#           APPLE_ID: ${{ secrets.APPLE_ID }}
+#           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+#           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+#         run: npm run release
+      
+#       - name: Upload DMG
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: M2-Film-dmg
+#           path: release/*.dmg
+      
+#       - name: Upload ZIP
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: M2-Film-zip
+#           path: release/*.zip
+
+# Manual release process until CI/CD is set up:
+# 1. Run: npm run release
+# 2. Go to: https://github.com/eham1/m2-film-app/releases/new
+# 3. Create a new tag (e.g., v1.0.0)
+# 4. Upload the .dmg and .zip files from the release/ folder
+# 5. Write release notes
+# 6. Publish!
+

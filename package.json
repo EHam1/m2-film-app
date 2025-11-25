@@ -1,0 +1,86 @@
+{
+  "name": "m2-film",
+  "version": "1.0.0",
+  "description": "M2 Film - A desktop app for bulk editing metadata on scanned film photos",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "start": "electron-vite preview",
+    "package": "npm run build && electron-builder --mac --dir",
+    "package:dmg": "npm run build && electron-builder --mac dmg",
+    "package:all": "npm run build && electron-builder --mac dmg zip",
+    "release": "npm run build && electron-builder --mac dmg zip --publish never"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eham1/m2-film-app.git"
+  },
+  "keywords": ["film", "photography", "metadata", "exif", "electron", "m2film"],
+  "author": "Ethan Ham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eham1/m2-film-app/issues"
+  },
+  "homepage": "https://github.com/eham1/m2-film-app#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "electron": "^39.2.3",
+    "electron-vite": "^4.0.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "exiftool-vendored": "^33.3.0"
+  },
+  "build": {
+    "appId": "com.m2film.app",
+    "productName": "M2 Film",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.photography",
+      "icon": "build/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "dmg": {
+      "title": "M2 Film",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "zip": {
+      "compression": "normal"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "eham1",
+      "repo": "m2-film-app"
+    },
+    "afterSign": "build/notarize.js"
+  }
+}
