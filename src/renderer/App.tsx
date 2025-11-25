@@ -4,6 +4,7 @@ import ThumbnailGrid from './components/ThumbnailGrid'
 import MetadataPanel from './components/MetadataPanel'
 import BackupModal from './components/BackupModal'
 import ProgressModal from './components/ProgressModal'
+import SplashScreen from './components/SplashScreen'
 import { usePhotos } from './hooks/usePhotos'
 import { useSelection } from './hooks/useSelection'
 import type { PhotoMetadata, WriteProgress, Settings } from './types'
@@ -19,8 +20,15 @@ export default function App() {
     metadata: PhotoMetadata;
     createBackup: boolean;
   } | null>(null)
+  const [isInitializing, setIsInitializing] = useState(true)
 
   useEffect(() => {
+    // Simulate initialization time (ExifTool startup)
+    // Show splash for minimum 1.5 seconds to avoid flash
+    const initTimer = setTimeout(() => {
+      setIsInitializing(false)
+    }, 1500)
+
     // Check if backup preference has been set
     window.electron.getSettings().then(result => {
       if (result.success && result.settings) {
@@ -35,6 +43,7 @@ export default function App() {
     })
 
     return () => {
+      clearTimeout(initTimer)
       window.electron.removeWriteProgressListener()
     }
   }, [])
@@ -136,6 +145,11 @@ export default function App() {
   const handleNewSession = () => {
     clearPhotos()
     clearSelection()
+  }
+
+  // Show splash screen while initializing
+  if (isInitializing) {
+    return <SplashScreen />
   }
 
   // Show import screen if no photos loaded

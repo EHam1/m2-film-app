@@ -13,6 +13,37 @@ export interface PhotoMetadata {
 }
 
 let exifToolInstance: ExifTool | null = null
+let isInitialized = false
+let initPromise: Promise<void> | null = null
+
+// Initialize and warm up ExifTool
+export async function initializeExifTool(): Promise<void> {
+  if (isInitialized) return
+  
+  if (initPromise) {
+    // Already initializing, wait for it
+    await initPromise
+    return
+  }
+  
+  initPromise = (async () => {
+    console.log('Initializing ExifTool...')
+    try {
+      exifToolInstance = exiftool
+      
+      // Warm up ExifTool by checking version (forces binary extraction and startup)
+      const version = await exifToolInstance.version()
+      console.log('ExifTool initialized successfully, version:', version)
+      
+      isInitialized = true
+    } catch (error) {
+      console.error('Failed to initialize ExifTool:', error)
+      throw error
+    }
+  })()
+  
+  await initPromise
+}
 
 export function getExifTool(): ExifTool {
   if (!exifToolInstance) {
@@ -22,6 +53,9 @@ export function getExifTool(): ExifTool {
 }
 
 export async function readMetadata(filePath: string): Promise<any> {
+  // Ensure ExifTool is initialized before use
+  await initializeExifTool()
+  
   const tool = getExifTool()
   try {
     const metadata = await tool.read(filePath)
@@ -36,6 +70,9 @@ export async function writeMetadata(
   filePath: string, 
   metadata: PhotoMetadata
 ): Promise<void> {
+  // Ensure ExifTool is initialized before use
+  await initializeExifTool()
+  
   const tool = getExifTool()
   
   const tags: any = {}

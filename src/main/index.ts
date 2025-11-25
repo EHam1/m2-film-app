@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import { setupIpcHandlers } from './ipcHandlers'
-import { closeExifTool } from './exifToolService'
+import { closeExifTool, initializeExifTool } from './exifToolService'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -36,7 +36,17 @@ function createWindow() {
   })
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // Initialize ExifTool early to avoid delays on first file operation
+  console.log('App ready, initializing ExifTool...')
+  try {
+    await initializeExifTool()
+    console.log('ExifTool ready')
+  } catch (error) {
+    console.error('Failed to initialize ExifTool on startup:', error)
+    // Continue anyway - will retry on first use
+  }
+  
   createWindow()
 
   app.on('activate', () => {
