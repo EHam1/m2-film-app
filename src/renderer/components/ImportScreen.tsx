@@ -42,31 +42,39 @@ export default function ImportScreen({ onFilesLoaded, error }: ImportScreenProps
   }
 
   return (
-    <div className="import-screen">
-      {error && (
-        <div className="error-message">
-          {error}
+    <div className="app">
+      <div className="toolbar">
+        <div className="toolbar-left">
+          <div className="app-title">M2 Film</div>
         </div>
-      )}
+      </div>
       
-      <div
-        className={`import-dropzone ${isDragOver ? 'drag-over' : ''}`}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onClick={handleSelectFiles}
-      >
-        <div className="import-title">M2 Film</div>
-        <div className="import-subtitle">Metadata Editor for Film Photographers</div>
-        <div style={{ fontSize: '48px', margin: '20px 0' }}>📸</div>
-        <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px' }}>
-          Drag & Drop Photos Here
-        </div>
-        <div style={{ fontSize: '14px', color: 'var(--color-gray)' }}>
-          or click to select files
-        </div>
-        <div className="import-instructions">
-          Supports JPEG & TIFF • Up to 500 photos • Single folder only
+      <div className="import-screen">
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+        
+        <div
+          className={`import-dropzone ${isDragOver ? 'drag-over' : ''}`}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={handleSelectFiles}
+        >
+          <div className="import-title">M2 Film</div>
+          <div className="import-subtitle">Metadata Editor for Film Photographers</div>
+          <div style={{ fontSize: '48px', margin: '20px 0' }}>📸</div>
+          <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '10px' }}>
+            Drag & Drop Photos Here
+          </div>
+          <div style={{ fontSize: '14px', color: 'var(--color-gray)' }}>
+            or click to select files
+          </div>
+          <div className="import-instructions">
+            Supports JPEG & TIFF • Up to 500 photos • Single folder only
+          </div>
         </div>
       </div>
     </div>

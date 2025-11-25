@@ -73,9 +73,6 @@
         }
       ]
     },
-    "zip": {
-      "compression": "normal"
-    },
     "publish": {
       "provider": "github",
       "owner": "eham1",
