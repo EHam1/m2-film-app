@@ -22,6 +22,7 @@ export function usePhotos() {
   const [error, setError] = useState<string | null>(null)
 
   const loadFiles = useCallback(async (filePaths?: string[]) => {
+    console.log('loadFiles called with:', filePaths)
     setLoading(true)
     setError(null)
 
@@ -30,11 +31,16 @@ export function usePhotos() {
 
       if (filePaths) {
         files = filePaths
+        console.log('Using provided file paths:', files.length)
       } else {
+        console.log('Opening file dialog...')
         const result = await window.electron.selectFiles()
+        console.log('File dialog result:', result)
         
         if (!result.success) {
-          setError(result.error || 'Failed to select files')
+          const errorMsg = result.error || 'Failed to select files'
+          console.error('File selection failed:', errorMsg)
+          setError(errorMsg)
           setLoading(false)
           return
         }
@@ -43,21 +49,30 @@ export function usePhotos() {
       }
 
       if (files.length === 0) {
+        console.warn('No files to load')
         setLoading(false)
         return
       }
 
+      console.log('Loading metadata for', files.length, 'files...')
       const result = await window.electron.loadPhotoMetadata(files)
+      console.log('Metadata load result:', result)
 
       if (!result.success) {
-        setError(result.error || 'Failed to load photos')
+        const errorMsg = result.error || 'Failed to load photos'
+        console.error('Metadata loading failed:', errorMsg)
+        setError(errorMsg)
         setLoading(false)
         return
       }
 
-      setPhotos(result.photos || [])
+      const loadedPhotos = result.photos || []
+      console.log('Successfully loaded', loadedPhotos.length, 'photos')
+      setPhotos(loadedPhotos)
     } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred')
+      const errorMsg = err.message || 'An unexpected error occurred'
+      console.error('Unexpected error in loadFiles:', err)
+      setError(errorMsg)
     } finally {
       setLoading(false)
     }

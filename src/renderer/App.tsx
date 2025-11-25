@@ -40,7 +40,13 @@ export default function App() {
   }, [])
 
   const handleFilesLoaded = async (filePaths: string[]) => {
-    await loadFiles(filePaths)
+    console.log('App: handleFilesLoaded called with', filePaths.length, 'files')
+    try {
+      await loadFiles(filePaths)
+      console.log('App: loadFiles completed successfully')
+    } catch (err) {
+      console.error('App: Error in handleFilesLoaded:', err)
+    }
   }
 
   const handleBackupChoice = async (alwaysBackup: boolean) => {
