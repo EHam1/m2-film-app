@@ -53,10 +53,8 @@
       "target": ["dmg", "zip"],
       "category": "public.app-category.photography",
       "icon": "build/icons/icon.png",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
     },
     "dmg": {
       "title": "M2 Film",
@@ -77,7 +75,6 @@
       "provider": "github",
       "owner": "eham1",
       "repo": "m2-film-app"
-    },
-    "afterSign": "build/notarize.js"
+    }
   }
 }
