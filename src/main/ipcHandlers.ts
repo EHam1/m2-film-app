@@ -10,7 +10,15 @@ interface WriteMetadataArgs {
   createBackup: boolean;
 }
 
+let handlersRegistered = false
+
 export function setupIpcHandlers(mainWindow: BrowserWindow) {
+  // Prevent duplicate registration
+  if (handlersRegistered) {
+    console.log('IPC handlers already registered, skipping...')
+    return
+  }
+  handlersRegistered = true
   // File selection
   ipcMain.handle('select-files', async () => {
     try {

@@ -20,9 +20,6 @@ function createWindow() {
     title: 'M2 Film'
   })
 
-  // Setup IPC handlers
-  setupIpcHandlers(mainWindow)
-
   // Load the app
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
@@ -39,6 +36,11 @@ function createWindow() {
 app.whenReady().then(() => {
   // Create window FIRST so user sees something immediately
   createWindow()
+  
+  // Setup IPC handlers once (guards against duplicate registration)
+  if (mainWindow) {
+    setupIpcHandlers(mainWindow)
+  }
   
   // Initialize ExifTool in background (non-blocking)
   console.log('App ready, initializing ExifTool in background...')

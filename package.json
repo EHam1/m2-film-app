@@ -53,8 +53,7 @@
       "target": ["dmg", "zip"],
       "category": "public.app-category.photography",
       "icon": "build/icons/icon.png",
-      "hardenedRuntime": false,
-      "gatekeeperAssess": false
+      "identity": null
     },
     "dmg": {
       "title": "M2 Film",

@@ -1,51 +1,54 @@
 # Installing M2 Film on macOS
 
-## Quick Install (2 steps)
+## Installation (3 steps)
 
-### 1. Download
+### Step 1: Download
 Choose either format:
 - **DMG** - Traditional macOS installer (113 MB)
 - **ZIP** - Direct app file (109 MB)
 
-### 2. Open the App
-**Important:** M2 Film is not yet signed with an Apple Developer certificate, so macOS will block it by default.
+### Step 2: Install to Applications
+- **If DMG:** Open it and drag M2 Film to Applications folder
+- **If ZIP:** Unzip and drag M2 Film.app to Applications folder
 
-#### Method A: Right-Click Method (Easiest)
-1. After downloading, locate **M2 Film.app** in your Applications folder or Downloads
-2. **Right-click** (or Control+click) on the app
-3. Select **"Open"** from the menu
-4. Click **"Open"** in the dialog that appears
-5. The app will now launch (and future opens will work normally)
+### Step 3: Remove Quarantine Flag (REQUIRED)
+**Important:** M2 Film is not signed with an Apple Developer certificate, so macOS will quarantine it. You MUST run this Terminal command:
 
-#### Method B: Terminal Command (Alternative)
-If right-click doesn't work, open Terminal and run:
 ```bash
 xattr -cr "/Applications/M2 Film.app"
 ```
-Then open the app normally.
+
+**How to do this:**
+1. Open **Terminal** (Applications → Utilities → Terminal)
+2. Copy and paste the command above
+3. Press Enter
+4. No output = success!
+
+Now open M2 Film from Applications - it should launch normally.
 
 ---
 
 ## Why Does macOS Block This App?
 
-M2 Film is currently distributed as **adhoc signed** (no Apple Developer certificate). 
+M2 Film is currently distributed **unsigned** (no Apple Developer certificate - costs $99/year). 
 
 This means:
-- ✅ **The app is safe** - All source code is available in this repository
-- ⚠️ **macOS Gatekeeper blocks it** - This is normal for unsigned apps
-- 🔓 **Easy to bypass** - Just use the right-click method above
+- ✅ **The app is safe** - All source code is [available on GitHub](https://github.com/eham1/m2-film-app)
+- ⚠️ **macOS Gatekeeper blocks it** - Says it's "damaged" (it's not)
+- 🔓 **Easy to bypass** - Just run the `xattr -cr` command once
 
-In the future, if M2 Film gets an Apple Developer certificate ($99/year), this step won't be necessary.
+**Why not just sign it?** Because I'm a bum and $99/year is steep for a free app. If M2 Film gets popular enough, I'll consider it.
 
 ---
 
 ## Troubleshooting
 
 ### "M2 Film is damaged and can't be opened"
-This usually means the quarantine flag is still set. Run:
+This is the default macOS quarantine message for unsigned apps. Run:
 ```bash
 xattr -cr "/Applications/M2 Film.app"
 ```
+Then try opening again.
 
 ### "No application found to open M2 Film"
 Make sure you downloaded the correct file for your Mac:
